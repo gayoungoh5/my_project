@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="대한민국어드바이저" />
-    <meta property="og:description" content="보고 있는 페이지의 내용 요약" />
-    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}" /><!---->
+    <meta property="og:title" content="대한민국어드바이저"/>
+    <meta property="og:description" content="보고 있는 페이지의 내용 요약"/>
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/><!---->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -45,33 +45,15 @@
             font-size: 25px;
         }
 
-        .body-contents {
-            width: 1100px;
-            height: 500px;
-            background-color: skyblue;
-        }
-
         input {
             width: 600px;
             height: 50px;
-        }
-
-        .wrap-search {
-            width: 800px;
-            padding-top: 150px;
-            margin: auto;
         }
 
         .selected {
             background-color: palegreen;
         }
 
-        .search-button {
-            width: 100px;
-            height: 50px;
-            background-color: black;
-            color: white;
-        }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -103,20 +85,23 @@
         }
 
         function hotel_button() {
+
             let search_point = search();
-            alert(search_point)
-            window.location.href="/hotel"
+            if (!search_point) {
+                alert('목적지를 입력하세요');
+                $("#destination").focus();
+                return;
+            }
 
         }
 
         function attraction_button() {
             let search_point = search();
-            if (!search_point){
+            if (!search_point) {
                 alert('목적지를 입력하세요');
                 $("#destination").focus();
                 return;
             }
-            window.location.href="/attraction"
             $.ajax({
                 type: "POST",
                 url: "/attraction",
@@ -138,7 +123,7 @@
                 success: function (response) {
                     if (response["result"] == "success") {
                         let attr = response['attraction'];
-                        for (let i = 0; i<attr.length; i++) {
+                        for (let i = 0; i < attr.length; i++) {
                             let attrs = attr[i]
                             let title = attrs['title']
                             let link = attrs['link']
@@ -153,9 +138,7 @@
         }
 
         function restaurant_button() {
-            let search_point = search();
-            alert(search_point)
-            window.location.href="/restaurant"
+
         }
 
         function etc_button() {
@@ -165,21 +148,29 @@
 </head>
 <body>
 <div class="wrap">
-    <div class="css-margin">
-        <a href="/"><img src="" alt="대한민국어드바이저"></a>
-    </div>
-
-    <div class="button-group">
-        <button onclick="hotel_button()" class="button-title">호텔</button>
-        <button onclick="attraction_button()" class="button-title">즐길거리</button>
-        <button onclick="restaurant_button()" class="button-title">음식점</button>
-        <button onclick="etc_button()" class="button-title">더보기</button>
-    </div>
-    <div id="body-contents" class="body-contents">
-        <div class="wrap-search">
-            <input id="destination" placeholder="어디로 가시나요?">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">국내여행어드바이저</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/hotel" onclick="hotel_button()">호텔<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/attraction" onclick="attraction_button()">즐길거리</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/restaurant" onclick="restaurant_button()">음식점</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            </form>
         </div>
-    </div>
+    </nav>
     <div id="contents" class="contents-list">
     </div>
 </div>

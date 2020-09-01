@@ -16,9 +16,20 @@ db = client.dbproject
 def localpage():
     return render_template('index.html')
 
+@app.route('/hotel')
+def hotelpage():
+    return render_template('hotel_page.html')
+
+@app.route('/attraction')
+def attractionpage():
+    return render_template('attraction_page.html')
+
+@app.route('/restaurant')
+def restaurantpage():
+    return render_template('restaurant_page.html')
 
 # 호텔 웹스크래핑
-@app.route('/hotel', methods=['GET'])
+@app.route('/hotel/api', methods=['GET'])
 def find_hotel():
     driver = webdriver.Chrome('/Users/gayoung/Downloads/chromedriver')
     driver.implicitly_wait(3)
@@ -34,7 +45,7 @@ def find_hotel():
 
     return jsonify({'result': 'success', 'hotelList': '연결'})
 
-@app.route('/attraction', methods=['POST'])
+@app.route('/attraction/api', methods=['POST'])
 def find_attraction():
     db.attraction.drop()
     # 전체 데이터 삭제
@@ -63,7 +74,7 @@ def find_attraction():
 
     return jsonify(({'result': 'success'}))
 
-@app.route('/attraction', methods=['GET'])
+@app.route('/attraction/api', methods=['GET'])
 def view_attraction():
     attraction = list(db.attraction.find({}, {'_id': 0}))
     return jsonify(({'result': 'success', 'attraction': attraction}))
