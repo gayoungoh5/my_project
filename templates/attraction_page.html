@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta property="og:title" content="대한민국어드바이저"/>
     <meta property="og:description" content="보고 있는 페이지의 내용 요약"/>
-    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/><!---->
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>대한민국 어드바이저</title>
@@ -21,7 +24,7 @@
 
         a {
             color: black;
-            font-size: 48px;
+            font-size: 20px;
         }
 
         .wrap {
@@ -67,16 +70,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $(".button-title").each(function () {
-                $(this).click(function () {
-                    $(this).addClass("selected");
-                    $(this).siblings().removeClass("selected");
-                    // 선택시 버튼 색상을 변경하는 코드
-                    // 컬러는 selected css 코드에서 변경 가능
-                })
-            })
-        })
 
         function search() {
             let destination_save = $('#destination').val()
@@ -84,8 +77,11 @@
             // input data 보관
         }
 
-        function hotel_button() {
+        $(document).ready(function () {
+            attraction_view();
+        });
 
+        function hotel_button() {
             let search_point = search();
             if (!search_point) {
                 alert('목적지를 입력하세요');
@@ -102,23 +98,13 @@
                 $("#destination").focus();
                 return;
             }
-            $.ajax({
-                type: "POST",
-                url: "/attraction",
-                data: {destination_give: search_point},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        attraction_view();
-                    }
-                }
-            })
         }
 
         function attraction_view() {
-            $('#contents').empty();
+            // $('#contents').empty();
             $.ajax({
                 type: "GET",
-                url: "/attraction",
+                url: "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchStay?ServiceKey=UnDRW2qZhUsa9c42J%2F2hZNGAMwsVuXffmWIuuWCdR9Xp2qkOv%2FB888mhcz8EFJJRXHzxrEnsP%2FT6bv54wKkBiQ%3D%3D&arrange=A&listYN=Y&pageNo=1&numOfRows=5000&MobileOS=ETC&MobileApp=AppTesting",
                 data: {},
                 success: function (response) {
                     if (response["result"] == "success") {
@@ -157,24 +143,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/hotel" onclick="hotel_button()">호텔<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/hotel" onclick="hotel_button()">호텔</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/attraction" onclick="attraction_button()">즐길거리</a>
+                    <a class="nav-link" href="/attraction" onclick="attraction_button()">즐길거리<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/restaurant" onclick="restaurant_button()">음식점</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <input id="destination" class="form-control mr-sm-2" type="search" placeholder="Search"
+                       aria-label="Search">
             </form>
         </div>
     </nav>
     <div id="contents" class="contents-list">
+<center>
+    <img src="https://lh3.googleusercontent.com/proxy/kmByLkyGBCBfJ8wBJVxO-wm7rfrqKh4EKOqpQ3kGpCx_GHEDUuP_tq1jmNX1jYQLksGoZGxE9LFmyOGjWEhZ7ktB2q5V6XsOhYGHSlkDD--DiOO46W9yK5uPP4cN7ZXk" alt="attraction">
+</center>
     </div>
 </div>
-
 
 </body>
 </html>

@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta property="og:title" content="대한민국어드바이저"/>
     <meta property="og:description" content="보고 있는 페이지의 내용 요약"/>
-    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/><!---->
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=2z8qx8jn87"></script>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -15,13 +21,19 @@
             padding: 30px;
         }
 
+        #map {
+            width: 700px;
+            height: 500px;
+            margin: 50px auto 50px auto;
+        }
+
         .css-margin {
             margin: 50px auto;
         }
 
         a {
             color: black;
-            font-size: 48px;
+            font-size: 20px;
         }
 
         .wrap {
@@ -52,6 +64,11 @@
 
         .selected {
             background-color: palegreen;
+        }
+
+        .wrap_hotel {
+            width: 700px;
+
         }
 
     </style>
@@ -85,7 +102,6 @@
         }
 
         function hotel_button() {
-
             let search_point = search();
             if (!search_point) {
                 alert('목적지를 입력하세요');
@@ -104,7 +120,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "/attraction",
+                url: "/attraction/api",
                 data: {destination_give: search_point},
                 success: function (response) {
                     if (response["result"] == "success") {
@@ -118,7 +134,7 @@
             $('#contents').empty();
             $.ajax({
                 type: "GET",
-                url: "/attraction",
+                url: "/attraction/api",
                 data: {},
                 success: function (response) {
                     if (response["result"] == "success") {
@@ -160,18 +176,27 @@
                     <a class="nav-link" href="/hotel" onclick="hotel_button()">호텔<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/attraction" onclick="attraction_view()">즐길거리</a>
+                    <a class="nav-link" href="/attraction" onclick="attraction_button()">즐길거리</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/restaurant" onclick="restaurant_button()">음식점</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <input id="destination" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             </form>
         </div>
     </nav>
     <div id="contents" class="contents-list">
+        <div id="map" style="width:100%;height:400px;"></div>
+        <script>
+            var mapOptions = {
+                center: new naver.maps.LatLng(37.3595704, 127.105399),
+                zoom: 10
+            };
+
+            var map = new naver.maps.Map('map', mapOptions);
+        </script>
     </div>
 </div>
 

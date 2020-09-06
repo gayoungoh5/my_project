@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="대한민국어드바이저" />
-    <meta property="og:description" content="보고 있는 페이지의 내용 요약" />
-    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}" /><!---->
+    <meta property="og:title" content="대한민국어드바이저"/>
+    <meta property="og:description" content="보고 있는 페이지의 내용 요약"/>
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/><!---->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -15,13 +15,11 @@
             padding: 30px;
         }
 
+        .title_image{
+            height: 80px;
+        }
         .css-margin {
             margin: 50px auto;
-        }
-
-        a {
-            color: black;
-            font-size: 48px;
         }
 
         .wrap {
@@ -48,7 +46,7 @@
         .body-contents {
             width: 1100px;
             height: 500px;
-            background-color: skyblue;
+            background-image: url("/static/headimg.jpeg");
         }
 
         input {
@@ -63,14 +61,7 @@
         }
 
         .selected {
-            background-color: palegreen;
-        }
-
-        .search-button {
-            width: 100px;
-            height: 50px;
-            background-color: black;
-            color: white;
+            background-color: cornsilk;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -105,21 +96,52 @@
         function hotel_button() {
             let search_point = search();
             alert(search_point)
-            window.location.href="/hotel"
+            window.location.href = "/hotel"
+            if (!search_point) {
+                alert('목적지를 입력하세요');
+                $("#destination").focus();
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/hotel/api",
+                data: {destination_give: search_point},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        hotel_view();
+                    }
+                }
+            })
+        }
+
+        function hotel_view() {
+            $('#contents').empty();
+            $.ajax({
+                type: "GET",
+                url: "/hotel/api",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                    } else {
+                        alert("error")
+                    }
+                }
+            })
 
         }
 
         function attraction_button() {
             let search_point = search();
-            if (!search_point){
+            window.location.href = "/attraction"
+            if (!search_point) {
                 alert('목적지를 입력하세요');
                 $("#destination").focus();
                 return;
             }
-            window.location.href="/attraction"
             $.ajax({
                 type: "POST",
-                url: "/attraction",
+                url: "/attraction/api",
                 data: {destination_give: search_point},
                 success: function (response) {
                     if (response["result"] == "success") {
@@ -133,12 +155,12 @@
             $('#contents').empty();
             $.ajax({
                 type: "GET",
-                url: "/attraction",
+                url: "/attraction/api",
                 data: {},
                 success: function (response) {
                     if (response["result"] == "success") {
                         let attr = response['attraction'];
-                        for (let i = 0; i<attr.length; i++) {
+                        for (let i = 0; i < attr.length; i++) {
                             let attrs = attr[i]
                             let title = attrs['title']
                             let link = attrs['link']
@@ -155,7 +177,7 @@
         function restaurant_button() {
             let search_point = search();
             alert(search_point)
-            window.location.href="/restaurant"
+            window.location.href = "/restaurant"
         }
 
         function etc_button() {
@@ -166,7 +188,7 @@
 <body>
 <div class="wrap">
     <div class="css-margin">
-        <a href="/"><img src="" alt="대한민국어드바이저"></a>
+        <a href="/"><img class="title_image" src="/static/head.png" alt="국내여행 어드바이저"></a>
     </div>
 
     <div class="button-group">
