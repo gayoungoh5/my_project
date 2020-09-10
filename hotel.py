@@ -15,7 +15,6 @@ seoul_gu = ["서울", "인천", "대전", "대구", "광주", "부산", "울산"
 client_id = "Xkk8AQs9lWNsiooHjJ8R"
 client_secret = "UW2NSMecHO"
 
-db.matjip.drop()
 
 # 검색어를 전달하면 결과를 반환하는 함수
 def get_naver_result(keyword):
