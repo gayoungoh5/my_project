@@ -6,7 +6,7 @@ import urllib.parse
 
 app = Flask(__name__)
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.185.68', 27017)
 db = client.seoul_matjip
 
 # HTML 화면 보여주기

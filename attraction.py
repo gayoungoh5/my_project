@@ -5,7 +5,7 @@ import time
 from pymongo import MongoClient
 
 # 맛집 데이터는 seoul_matjip 이라는 데이터베이스에 저장하겠습니다.
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.185.68', 27017)
 db = client.seoul_matjip
 
 # 서울시 구마다 맛집을 검색해보겠습니다.
