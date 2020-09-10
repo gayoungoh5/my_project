@@ -2,62 +2,49 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="대한민국어드바이저"/>
-    <meta property="og:description" content="보고 있는 페이지의 내용 요약"/>
+    <meta property="og:title" content="국내여행 어드바이저"/>
+    <meta property="og:description" content="국내여행 어디로 가볼까 궁금할 땐?"/>
     <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/><!---->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>대한민국 어드바이저</title>
+    <title>국내여행어드바이저</title>
     <style>
-        body {
-            margin: 20px;
-            padding: 30px;
-        }
 
         .title_image{
             height: 80px;
         }
         .css-margin {
-            margin: 50px auto;
+            margin: 30px;
         }
 
         .wrap {
             margin: auto;
-            width: 1200px;
+            width: 800px;
         }
 
         .button-group {
-            margin: 50px auto;
-            width: 1100px;
+            margin: 30px auto;
+            width: 800px;
             padding: 20px 20px;
         }
 
         .button-title {
-            width: 220px;
-            height: 80px;
-            padding: 20px;
+            width: 150px;
+            height: 60px;
+            padding: 10px;
             margin-left: 20px;
             border-radius: 5px;
             border: black;
-            font-size: 25px;
+            font-size: 20px;
         }
 
         .body-contents {
-            width: 1100px;
-            height: 500px;
-            background-image: url("/static/headimg.jpeg");
-        }
-
-        input {
-            width: 600px;
-            height: 50px;
-        }
-
-        .wrap-search {
             width: 800px;
-            padding-top: 150px;
-            margin: auto;
+            height: 400px;
+            background-image: url("/static/headimg.jpeg");
+            background-size: 100%;
+            background-position-x: center;
         }
 
         .selected {
@@ -87,123 +74,41 @@
             })
         })
 
-        function search() {
-            let destination_save = $('#destination').val()
-            return destination_save
-            // input data 보관
-        }
 
         function hotel_button() {
-            let search_point = search();
-            alert(search_point)
             window.location.href = "/hotel"
-            if (!search_point) {
-                alert('목적지를 입력하세요');
-                $("#destination").focus();
-                return;
-            }
-            $.ajax({
-                type: "POST",
-                url: "/hotel/api",
-                data: {destination_give: search_point},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        hotel_view();
-                    }
-                }
-            })
-        }
-
-        function hotel_view() {
-            $('#contents').empty();
-            $.ajax({
-                type: "GET",
-                url: "/hotel/api",
-                data: {},
-                success: function (response) {
-                    if (response["result"] == "success") {
-
-                    } else {
-                        alert("error")
-                    }
-                }
-            })
-
         }
 
         function attraction_button() {
-            let search_point = search();
             window.location.href = "/attraction"
-            if (!search_point) {
-                alert('목적지를 입력하세요');
-                $("#destination").focus();
-                return;
-            }
-            $.ajax({
-                type: "POST",
-                url: "/attraction/api",
-                data: {destination_give: search_point},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        attraction_view();
-                    }
-                }
-            })
-        }
-
-        function attraction_view() {
-            $('#contents').empty();
-            $.ajax({
-                type: "GET",
-                url: "/attraction/api",
-                data: {},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        let attr = response['attraction'];
-                        for (let i = 0; i < attr.length; i++) {
-                            let attrs = attr[i]
-                            let title = attrs['title']
-                            let link = attrs['link']
-                            let temp = `<div><a href="${link}">${title}</a></div>`
-                            $('#contents').append(temp)
-                        }
-                    } else {
-                        alert("error")
-                    }
-                }
-            })
         }
 
         function restaurant_button() {
-            let search_point = search();
-            alert(search_point)
             window.location.href = "/restaurant"
         }
 
         function etc_button() {
-
+            alert('준비중입니다')
         }
     </script>
 </head>
 <body>
 <div class="wrap">
+
     <div class="css-margin">
         <a href="/"><img class="title_image" src="/static/head.png" alt="국내여행 어드바이저"></a>
     </div>
-
+        <center>
     <div class="button-group">
         <button onclick="hotel_button()" class="button-title">호텔</button>
         <button onclick="attraction_button()" class="button-title">즐길거리</button>
         <button onclick="restaurant_button()" class="button-title">음식점</button>
         <button onclick="etc_button()" class="button-title">더보기</button>
     </div>
+
     <div id="body-contents" class="body-contents">
-        <div class="wrap-search">
-            <input id="destination" placeholder="어디로 가시나요?">
-        </div>
     </div>
-    <div id="contents" class="contents-list">
-    </div>
+    </center>
 </div>
 
 
